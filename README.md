@@ -22,14 +22,15 @@ I agree! This one has a bit of a unique stack, it uses:
 - [Javalin](https://javalin.io/): Backend web server.
 - [j2html](https://j2html.com/): Html builder library.
 
-Which allows the whole thing to be written a single Java file.
+Which allows the whole thing to be written a [single Java file](https://github.com/AussieGuy0/java-htmx-todo/blob/e8c174b8bfd3173e2b392601b460dc75411db7c5/src/main/java/dev/anthonybruno/htmx/Server.java).
 There is not a single line of Javascript in this whole project!^
 
-^ Yes, technically HTMX does bring in Javascript but you know what I am saying.
+^ Yes, technically HTMX does bring in Javascript but ya know what I'm saying.
 
 ## Wow...there is an awful lot of inline styling in this project.
 
 This is just an example application, not a fully fledged deploy-on-prod thing!
+
 If you were doing it properly, maybe you would write it in css files, import tailwind or something.
 
 ## Alright alright, how do I run this?
@@ -41,4 +42,3 @@ In the root directory, we can also run it by:
 
 1. `mvn package`
 2. `java -jar target/htmx-1.0-SNAPSHOT.jar`
-
