@@ -10,6 +10,8 @@ your wildest dreams.
 
 Nah, it's just a todo list app.
 
+![A beautiful TODO app](/screenshot.png)
+
 ## Great, we need more of them.
 
 I agree! This one has a bit of a unique stack, it uses:
