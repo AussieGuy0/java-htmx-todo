@@ -1,6 +1,7 @@
 package dev.anthonybruno.htmx;
 
 import io.javalin.Javalin;
+import io.javalin.http.BadRequestResponse;
 import io.javalin.http.HandlerType;
 import j2html.tags.specialized.LiTag;
 import j2html.tags.specialized.UlTag;
@@ -9,8 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static j2html.TagCreator.*;
 
@@ -48,7 +49,7 @@ public class Server implements AutoCloseable {
         body(
            div(
             h1("Todo App"),
-            createTodoList(idToTodo)
+            createTodoList(idToTodo, Optional.empty())
           ).withClass("container")
         )
       );
@@ -60,9 +61,12 @@ public class Server implements AutoCloseable {
     // Create new todo item.
     javalin.addHandler(HandlerType.POST, "/todos", ctx -> {
       var newContent = ctx.formParam("content");
+      if (newContent == null || newContent.isBlank()) {
+        ctx.html(createTodoList(idToTodo, Optional.of("Must be non-empty")).render());
+        return;
+      }
       var newTodo = new Todo(UUID.randomUUID().toString(), newContent, false);
       idToTodo.put(newTodo.id, newTodo);
-      ctx.html(createTodoList(idToTodo).render());
     });
 
     // Update the content of a todo item.
@@ -99,7 +103,7 @@ public class Server implements AutoCloseable {
     });
   }
 
-  private UlTag createTodoList(Map<String, Todo> idToTodo) {
+  private UlTag createTodoList(Map<String, Todo> idToTodo, Optional<String> errorMessage) {
     return ul()
       .withId("todo-list")
       .with(
@@ -110,12 +114,13 @@ public class Server implements AutoCloseable {
         li(
           form(
             input()
-              .isRequired()
+//              .isRequired()
               .withType("text")
               .withName("content"),
             input()
               .withValue("Add")
-              .withType("submit")
+              .withType("submit"),
+              iff(errorMessage, (msg) -> div(msg))
           )
             .withStyle("display: flex;")
             .attr("hx-swap", "outerHTML")
