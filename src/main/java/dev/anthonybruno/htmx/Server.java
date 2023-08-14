@@ -2,12 +2,16 @@ package dev.anthonybruno.htmx;
 
 import io.javalin.Javalin;
 import j2html.tags.specialized.H2Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static j2html.TagCreator.*;
 
 public class Server {
+
+  private static final Logger log = LoggerFactory.getLogger(Server.class);
 
   // Create a H2 tag with an id.
   private static H2Tag createCounterElement(int count) {
@@ -37,7 +41,7 @@ public class Server {
               )
           )
       );
-      var rendered = "<!DOCTYPE html>\n" + content.render();
+      var rendered = "<!DOCTYPE html>\n" + content.renderFormatted();
       ctx.html(rendered);
     });
 
@@ -45,6 +49,12 @@ public class Server {
       var newCounter = createCounterElement(counter.incrementAndGet());
       ctx.html(newCounter.render());
     });
+
+    javalin.after((ctx) -> {
+      log.info(ctx.result());
+    });
+
     javalin.start();
+
   }
 }
