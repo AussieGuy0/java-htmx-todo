@@ -1,0 +1,26 @@
+.add-todo-form {
+    display: flex;
+}
+
+.add-todo-form input {
+    width: auto;
+}
+
+.add-todo-form__text-input {
+    flex-grow: 3;
+}
+
+.add-todo-form__button {
+    flex-grow: 1;
+}
+
+#error-message {
+    background-color: darkred;
+    border-radius: 50px;
+    text-align: center;
+    color: white;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
