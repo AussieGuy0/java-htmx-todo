@@ -6,14 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CounterServer {
 
-  /**
-   * Represents a single todo item.
-   */
-  public record Todo(String id, String content, boolean completed) {
-  }
-
   private final Javalin javalin;
-
 
   public CounterServer() {
     var counter = new AtomicInteger();
@@ -31,11 +24,10 @@ public class CounterServer {
           <head>
              <script src="/webjars/htmx.org/1.9.2/dist/htmx.min.js"></script>
              <link rel="stylesheet" href="/style/pico.min.css">
-             <link rel="stylesheet" href="/style/styles.css">
              <title>Counter</title>
           </head>
           <body class='container'>
-            <h1>Counter</h1>
+            <h1>My Cool Counter</h1>
             %s
             <button
               hx-post="/increment"
