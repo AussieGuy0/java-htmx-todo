@@ -95,6 +95,10 @@ public class Server implements AutoCloseable {
     javalin.post("/api/todos/{id}", ctx -> {
       var id = ctx.pathParam("id");
       var newContent = ctx.formParam("value");
+      if (newContent == null || newContent.isBlank()) {
+        ctx.status(204);
+        return;
+      }
 
       var updatedTodo = idToTodo.computeIfPresent(id, (_id, oldTodo) -> new Todo(id, newContent, oldTodo.completed));
 
@@ -177,7 +181,7 @@ public class Server implements AutoCloseable {
           .attr("hx-target", "#error-message")
           .attr("hx-swap", "innerHTML")
           .attr("hx-post", "/api/todos/validate")
-          .attr("hx-trigger", "keyup change delay:100ms")
+          .attr("hx-trigger", "keyup change delay:200ms")
         ,
         input(aClass("add-todo-form__button"))
           .withValue("Add")
@@ -201,10 +205,10 @@ public class Server implements AutoCloseable {
       .withName("value")
       .withType("text")
       .withStyle("flex-grow: 2;")
+      .isRequired()
       .isAutofocus()
       .attr("hx-trigger", "blur, change")
-      .attr("hx-post", "/api/todos/" + todo.id)
-      .attr("hx-target", "#todo-" + todo.id);
+      .attr("hx-post", "/api/todos/" + todo.id);
     var completeCheckbox = (todo.completed ?
       input()
         .isChecked() :
@@ -217,9 +221,8 @@ public class Server implements AutoCloseable {
       completeCheckbox,
       editing ? editInput : text
     )
-      .attr("hx-target", "#todo-" + todo.id)
+      .attr("hx-target", "this")
       .attr("hx-swap", "outerHTML")
-      .withId("todo-" + todo.id)
       .withStyle("display: flex; align-items: center;");
   }
 
